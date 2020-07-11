@@ -1,0 +1,64 @@
+@import "./normalize.css";
+
+/*:root -> 获取根元素html
+    在css中定义变量，在其他定义的css中可以使用
+    例如在a标签中color: var(--color-text);，其中的--color-text就是引用了此处定义的css变量
+*/
+:root {
+    /*文字默认颜色*/
+    --color-text: #666;
+    /*文字高亮时的颜色*/
+    --color-high-text: #ff5777;
+    /*设置背景颜色，例如导航等等*/
+    --color-tint: #ff8198;
+    /*设置白色的背景颜色*/
+    --color-background: #fff;
+    /*整体的字体大小为14px*/
+    --font-size: 14px;
+    --line-height: 1.5;
+}
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Helvetica Neue",Helvetica,"PingFang SC","Hiragino Sans GB","Microsoft YaHei","微软雅黑",Arial,sans-serif;
+    user-select: none; /* 禁止用户鼠标在页面上选中文字/图片等 */
+    -webkit-tap-highlight-color: transparent; /* webkit是苹果浏览器引擎，tap点击，highlight背景高亮，color颜色，颜色用数值调节 */
+    background: var(--color-background);
+    color: var(--color-text);
+    /* rem vw/vh */
+    width: 100vw;
+}
+
+a {
+    color: var(--color-text);
+    text-decoration: none;
+}
+
+
+.clear-fix::after {
+    clear: both;
+    content: '';
+    display: block;
+    width: 0;
+    height: 0;
+    visibility: hidden;
+}
+
+.clear-fix {
+    zoom: 1;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
