@@ -5,14 +5,19 @@
       <div slot="center"><h3>购物街</h3></div>
       <div slot="right"></div>
     </nav-bar>
-    <home-swiper :cbanners="banners"></home-swiper>
-    <home-recommend-view :crecommends="recommends"></home-recommend-view>
-    <home-week-feature></home-week-feature>
-    <tab-controller class="tab-controller"
-                    :titles="titles"
-                    @tabClick="tabClick"></tab-controller>
-    <goods-list :goods="showGoods"></goods-list>
-
+    <scroll class="content" ref="scroll" @scroll="contentScroll"
+            :probe-type="3" :pull-up-load="true"
+            @pullingUp="mGetHomeGoods(currentType)">
+      <home-swiper :cbanners="banners"></home-swiper>
+      <home-recommend-view :crecommends="recommends"></home-recommend-view>
+      <home-week-feature></home-week-feature>
+      <tab-controller class="tab-controller"
+                      :titles="titles"
+                      @tabClick="tabClick"></tab-controller>
+      <goods-list :goods="showGoods"></goods-list>
+    </scroll>
+    <!--原生的组件可以直接使用click属性，但是自定义方法必须在click后加上.native才能生效-->
+    <back-top @click.native="backClick" v-show="isShow"></back-top>
   </div>
 </template>
 
@@ -24,6 +29,8 @@
   import NavBar from "components/common/navbar/NavBar";
   import TabController from "components/content/tabController/TabController";
   import GoodsList from "components/content/goods/GoodsList";
+  import Scroll from "components/common/scroll/Scroll"
+  import BackTop from "components/content/backTop/BackTop";
 
   import {getHomeMultidata,getHomeGoods} from "network/home";
 
@@ -35,7 +42,9 @@
         HomeSwiper,
         HomeWeekFeature,
         TabController,
-        GoodsList
+        GoodsList,
+        Scroll,
+        BackTop
       },
     data(){
       return{
@@ -56,7 +65,8 @@
             list: []
           }
         },
-        currentType:'pop'
+        currentType:'pop',
+        isShow:false
       }
     },
     computed:{
@@ -79,7 +89,7 @@
       mGetHomeMultidata(){
         //请求多个数据
         getHomeMultidata().then(res=>{
-          console.log(res);
+          // console.log(res);
           this.banners = res.data.banner.list
           this.recommends = res.data.recommend.list
         });
@@ -92,6 +102,8 @@
           //...语法是将数组解析再一次push到目标数组中
           this.goods[type].list.push(...res.data.list)
           this.goods[type].page += 1
+
+          this.$refs.scroll.finishPullUp()
         })
       },
       /**
@@ -108,6 +120,27 @@
           case 2:
             this.currentType = 'sell'
         }
+      },
+      //回到顶部
+      backClick(){
+        //通过refs的scroll拿到当前页面对应的scroll组件
+        //当前页面的scroll组件是引用的Scroll子组件，在子组件的data中有scroll对象
+        //因此可以通过this.$refs.scroll.scroll拿到子组件中的scroll对象
+        //子组件中的scroll对象已被赋值为new BScroll，它有一个scrollTo方法，可以定位到确定的位置
+        //scrollTo(x,y)
+        // this.$refs.scroll.scroll.scrollTo(0,0)
+
+        //Scroll组件内部封装了scrollTo方法，直接调用即可
+        this.$refs.scroll.scrollTo(0,0)
+      },
+      //监听位置显示回到顶端
+      contentScroll(position){
+        // console.log(position);
+        if(position.y < -800){
+          this.isShow = true
+        }else{
+          this.isShow = false
+        }
       }
     }
   }
@@ -116,6 +149,8 @@
 <style scoped>
   #home{
     padding-top: 44px;
+    height: 100vh;
+    position: relative;
   }
 
   .home-nav{
@@ -134,4 +169,15 @@
     top: 44px;
     z-index: 1;
   }
+  .content{
+    overflow: hidden;
+    position: absolute;
+    top: 44px;
+    bottom: 49px;
+  }
+  /*.content{*/
+  /*  margin-top: 44px;*/
+  /*  height: calc(100% - 93px);*/
+  /*  overflow: hidden;*/
+  /*}*/
 </style>
