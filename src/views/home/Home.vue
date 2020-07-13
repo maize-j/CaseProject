@@ -1,19 +1,22 @@
 <template>
   <div id="home">
     <nav-bar class="home-nav">
-      <div slot="left"></div>
       <div slot="center"><h3>购物街</h3></div>
-      <div slot="right"></div>
     </nav-bar>
+    <tab-controller :titles="titles"
+                    @tabClick="tabClick"
+                    ref="tabController1"
+                    class="tab-controller"
+                    v-show="isTabShow"></tab-controller>
     <scroll class="content" ref="scroll" @scroll="contentScroll"
             :probe-type="3" :pull-up-load="true"
-            @pullingUp="mGetHomeGoods(currentType)">
-      <home-swiper :cbanners="banners"></home-swiper>
+            @pullingUp="contentPullingUp">
+      <home-swiper :cbanners="banners" @swiperImageLoad="swiperImageLoad"></home-swiper>
       <home-recommend-view :crecommends="recommends"></home-recommend-view>
       <home-week-feature></home-week-feature>
-      <tab-controller class="tab-controller"
-                      :titles="titles"
-                      @tabClick="tabClick"></tab-controller>
+      <tab-controller :titles="titles"
+                      @tabClick="tabClick"
+                      ref="tabController2"></tab-controller>
       <goods-list :goods="showGoods"></goods-list>
     </scroll>
     <!--原生的组件可以直接使用click属性，但是自定义方法必须在click后加上.native才能生效-->
@@ -33,6 +36,7 @@
   import BackTop from "components/content/backTop/BackTop";
 
   import {getHomeMultidata,getHomeGoods} from "network/home";
+  import {debounce} from 'common/utils'
 
   export default {
       name: "Home",
@@ -66,7 +70,10 @@
           }
         },
         currentType:'pop',
-        isShow:false
+        isShow:false,
+        tabOffSetTop: 0,
+        isTabShow:false,
+        saveY:0
       }
     },
     computed:{
@@ -81,6 +88,33 @@
       this.mGetHomeGoods('pop')
       this.mGetHomeGoods('new')
       this.mGetHomeGoods('sell')
+
+    },
+    activated() {
+      // console.log('activated');
+      // console.log(this.saveY);
+      //从其他页面跳转回首页时，回到离开时浏览位置
+      this.$refs.scroll.scrollTo(0,this.saveY,0)
+    },
+    deactivated() {
+      // console.log(this.$refs.scroll.scroll.y);
+      //记录首页离开时的位置
+      this.saveY = this.$refs.scroll.scroll.y
+    },
+    destroyed() {
+      console.log('destroyed');
+    },
+    mounted() {
+        //图片加载完成的事件监听
+        //使用防抖动函数控制刷新次数
+        const refresh = debounce(this.$refs.scroll.refresh,500)
+
+      //监听item中图片加载完成
+      this.$bus.$on('itemImgLoad',()=>{
+        // console.log('-----');
+        refresh()
+      })
+
     },
     methods:{
       /**
@@ -106,8 +140,11 @@
           this.$refs.scroll.finishPullUp()
         })
       },
+      contentPullingUp(){
+        this.mGetHomeGoods(this.currentType)
+      },
       /**
-       * 时间监听相关的方法
+       * 事件监听相关的方法
        */
       tabClick(index){
         switch (index) {
@@ -120,6 +157,8 @@
           case 2:
             this.currentType = 'sell'
         }
+        this.$refs.tabController1.currentIndex = index
+        this.$refs.tabController2.currentIndex = index
       },
       //回到顶部
       backClick(){
@@ -136,11 +175,42 @@
       //监听位置显示回到顶端
       contentScroll(position){
         // console.log(position);
+        //决定回到顶部箭头是否显示
         if(position.y < -800){
           this.isShow = true
         }else{
           this.isShow = false
         }
+
+        //决定tabController是否吸顶（position: fixed）
+
+        if(position.y < -this.tabOffSetTop){
+          this.isTabShow = true
+        }else{
+          this.isTabShow = false
+        }
+      },
+      //防抖函数的封装
+      // debounce(func,delay){
+      //   let timer = null
+      //
+      //   return function (...args) {
+      //     if (timer) clearTimeout(timer)
+      //     timer = setTimeout(()=>{
+      //       func.apply(this,args)
+      //     },delay)
+      //   }
+      // }
+
+      //监听轮播图是否加载完成
+      swiperImageLoad(){
+        // console.log('swiperImageLoad');
+        // console.log(this.$refs.tabController.$el.offsetTop);
+        //切换条吸顶效果
+        //获取tabController的offSet，但在本例中，tabController是一个组件，没有offSetTop属性
+        //所有的组件都有一个$el属性，用于获取组件中的元素
+        // console.log('offsettop'+this.$refs.tabController.$el.offsetTop);
+        this.tabOffSetTop = this.$refs.tabController2.$el.offsetTop
       }
     }
   }
@@ -148,7 +218,7 @@
 
 <style scoped>
   #home{
-    padding-top: 44px;
+    /*padding-top: 44px;*/
     height: 100vh;
     position: relative;
   }
@@ -157,23 +227,22 @@
     background-color: var(--color-tint);
     color: #ffffff;
 
-  /*  固定导航栏*/
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: 0;
-    z-index: 1;
-  }
-  .tab-controller{
-    position: sticky;
-    top: 44px;
-    z-index: 1;
+  /*  使用浏览器原生滚动时固定导航栏*/
+  /*  position: fixed;*/
+  /*  left: 0;*/
+  /*  right: 0;*/
+  /*  top: 0;*/
+  /*  z-index: 1;*/
   }
   .content{
     overflow: hidden;
     position: absolute;
     top: 44px;
     bottom: 49px;
+  }
+  .tab-controller{
+    position: relative;
+    z-index: 9;
   }
   /*.content{*/
   /*  margin-top: 44px;*/

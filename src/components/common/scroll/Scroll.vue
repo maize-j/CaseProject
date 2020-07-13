@@ -31,11 +31,16 @@
       methods:{
           //time的默认值为300
         scrollTo(x,y,time=300){
-          this.scroll.scrollTo(x,y,time)
+          this.scroll && this.scroll.scrollTo && this.scroll.scrollTo(x,y,time)
         },
         //finish
         finishPullUp(){
           this.scroll.finishPullUp()
+        },
+        //refresh
+        refresh(){
+          // console.log('-----');
+          this.scroll && this.scroll.refresh && this.scroll.refresh()
         }
       },
       mounted() {
@@ -55,24 +60,28 @@
           pullUpLoad: this.pullUpLoad
 
         })
+
         //滑动位置改变时触发，scroll监听位置变化,参数为实时的位置
         this.scroll.on('scroll',(position)=>{
           // console.log(position);
           this.$emit('scroll',position)
         })
+
         //在一次上拉加载的动作后触发，这个时机一般用于去后端请求数据
         //pullingUp无参数
-        this.scroll.on('pullingUp',()=>{
-          //发送网络请求，请求更多页的数据
-          // console.log('上拉加载更多');
-          this.$emit('pullingUp')
-          //等数据请求完成，并且将新的数据展示出来后，要调用finishPullUp函数
-          //否则，在进行第二次上拉加载更多时，将不会生效
-          //为了能够顺利进行下一次的上拉加载更多，要调用finishPullUp
-          // setTimeout(()=>{
-          //   this.scroll.finishPullUp()
-          // },2000)
-        })
+        if(this.pullUpLoad){
+          this.scroll.on('pullingUp',()=>{
+            //发送网络请求，请求更多页的数据
+            // console.log('上拉加载更多');
+            this.$emit('pullingUp')
+            //等数据请求完成，并且将新的数据展示出来后，要调用finishPullUp函数
+            //否则，在进行第二次上拉加载更多时，将不会生效
+            //为了能够顺利进行下一次的上拉加载更多，要调用finishPullUp
+            // setTimeout(()=>{
+            //   this.scroll.finishPullUp()
+            // },2000)
+          })
+        }
       }
     }
 </script>
