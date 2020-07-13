@@ -24,9 +24,10 @@
         imgLoad(){
           this.$bus.$emit('itemImgLoad')
         },
+        //使用动态路由或query的方式，在跳转到详情页时，将商品信息传递过去
         itemClick(){
           // console.log('跳转到详情');
-
+          this.$router.push('/detail/'+this.goodsItem.iid)
         }
       }
     }
