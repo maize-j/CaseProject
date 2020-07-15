@@ -30,3 +30,20 @@ export class Shop {
     this.goodsCount = shopInfo.cGoods
   }
 }
+
+export class DetailInfo{
+  constructor(detailInfo) {
+    this.desc = detailInfo.desc
+    this.imageList = detailInfo.detailImage[0].list
+    this.key = detailInfo.detailImage[0].key
+  }
+}
+
+export class GoodsParams {
+  constructor(info,rule) {
+    //注：image可能没有值（有些商品有值，有些商品没有值）
+    this.image = info.image ? info.image[0]:'';
+    this.infos = info.set;
+    this.sizes = rule.tables;
+  }
+}

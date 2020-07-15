@@ -69,10 +69,20 @@
     border-bottom: 1px solid rgba(100,100,100,0.1);
     justify-content: space-between;
   }
-
+  .info-service{
+    display: flex;
+    justify-content: space-between;
+    line-height: 60px;
+  }
   .info-service-item img{
-    width: 15px;
-    height: 15px;
+    width: 14px;
+    height: 14px;
+    position: relative;
+    top: 2px;
+  }
+  .info-service-item span{
+    font-size: 13px;
+    color: #333;
   }
 
 </style>
