@@ -33,10 +33,12 @@
   import TabController from "components/content/tabController/TabController";
   import GoodsList from "components/content/goods/GoodsList";
   import Scroll from "components/common/scroll/Scroll"
-  import BackTop from "components/content/backTop/BackTop";
+  // import BackTop from "components/content/backTop/BackTop";
 
   import {getHomeMultidata,getHomeGoods} from "network/home";
   import {debounce} from 'common/utils'
+  // import {itemListerMixin} from 'common/mixin'
+  import {backTopMixin} from 'common/mixin'
 
   export default {
       name: "Home",
@@ -48,7 +50,7 @@
         TabController,
         GoodsList,
         Scroll,
-        BackTop
+        // BackTop
       },
     data(){
       return{
@@ -70,7 +72,7 @@
           }
         },
         currentType:'pop',
-        isShow:false,
+        // isShow:false,
         tabOffSetTop: 0,
         isTabShow:false,
         saveY:0
@@ -104,14 +106,24 @@
     destroyed() {
       console.log('destroyed');
     },
+    //混入，会执行common/mixin.js中定义itemListerMixin中的mounted，在需要时，只需在页面引入混入即可
+    // mixins:[itemListerMixin],
+    mixins:[backTopMixin],
     mounted() {
         //图片加载完成的事件监听
         //使用防抖动函数控制刷新次数
         const refresh = debounce(this.$refs.scroll.refresh,500)
 
       //监听item中图片加载完成
-      this.$bus.$on('itemImgLoad',()=>{
+      // this.$bus.$on('homeItemImgLoad',()=>{
+      //   // console.log('-----');
+      //   console.log('homeItemImgLoad');
+      //   refresh()
+      // })
+
+      this.$bus.$on('homeItemImgLoad',()=>{
         // console.log('-----');
+        // console.log('homeItemImgLoad');
         refresh()
       })
 
@@ -161,17 +173,17 @@
         this.$refs.tabController2.currentIndex = index
       },
       //回到顶部
-      backClick(){
-        //通过refs的scroll拿到当前页面对应的scroll组件
-        //当前页面的scroll组件是引用的Scroll子组件，在子组件的data中有scroll对象
-        //因此可以通过this.$refs.scroll.scroll拿到子组件中的scroll对象
-        //子组件中的scroll对象已被赋值为new BScroll，它有一个scrollTo方法，可以定位到确定的位置
-        //scrollTo(x,y)
-        // this.$refs.scroll.scroll.scrollTo(0,0)
-
-        //Scroll组件内部封装了scrollTo方法，直接调用即可
-        this.$refs.scroll.scrollTo(0,0)
-      },
+      // backClick(){
+      //   //通过refs的scroll拿到当前页面对应的scroll组件
+      //   //当前页面的scroll组件是引用的Scroll子组件，在子组件的data中有scroll对象
+      //   //因此可以通过this.$refs.scroll.scroll拿到子组件中的scroll对象
+      //   //子组件中的scroll对象已被赋值为new BScroll，它有一个scrollTo方法，可以定位到确定的位置
+      //   //scrollTo(x,y)
+      //   // this.$refs.scroll.scroll.scrollTo(0,0)
+      //
+      //   //Scroll组件内部封装了scrollTo方法，直接调用即可
+      //   this.$refs.scroll.scrollTo(0,0)
+      // },
       //监听位置显示回到顶端
       contentScroll(position){
         // console.log(position);

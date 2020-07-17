@@ -5,8 +5,13 @@ export function getDetail(iid){
     url: 'detail?iid='+iid
   })
 }
+export function getRecommend() {
+  return request({
+    url:'/recommend'
+  })
+}
 
-
+//商品信息
 export class GoodsInfo {
   constructor(itemInfo,columns,services) {
     this.title = itemInfo.title
@@ -20,6 +25,7 @@ export class GoodsInfo {
   }
 }
 
+//店铺信息
 export class Shop {
   constructor(shopInfo) {
     this.logo = shopInfo.shopLogo
@@ -31,6 +37,7 @@ export class Shop {
   }
 }
 
+//商品详细信息
 export class DetailInfo{
   constructor(detailInfo) {
     this.desc = detailInfo.desc
@@ -39,6 +46,7 @@ export class DetailInfo{
   }
 }
 
+//商品参数
 export class GoodsParams {
   constructor(info,rule) {
     //注：image可能没有值（有些商品有值，有些商品没有值）
@@ -47,3 +55,12 @@ export class GoodsParams {
     this.sizes = rule.tables;
   }
 }
+//
+// export class RecommendInfo {
+//   constructor(info) {
+//     this.show.img = info.item_url;
+//     this.title = info.title;
+//     this.price = info.price;
+//     this.cfav = info.cfav
+//   }
+// }

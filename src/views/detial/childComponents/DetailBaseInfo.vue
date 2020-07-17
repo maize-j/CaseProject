@@ -44,6 +44,10 @@
   .info-title{
     color: #222;
   }
+  .info-price .n-price{
+    font-size: 23px;
+    color: red;
+  }
   .info-price .o-price{
     font-size: 13px;
     margin-left: 5px;

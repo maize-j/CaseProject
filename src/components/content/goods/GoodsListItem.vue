@@ -1,6 +1,6 @@
 <template>
     <div class="goods-item" @click="itemClick">
-      <img :src="goodsItem.show.img" @load="imgLoad">
+      <img :src="showImage" @load="imgLoad">
       <div class="goods-info">
         <p>{{ goodsItem.title }}</p>
         <span class="price">{{ goodsItem.price }}</span>
@@ -20,9 +20,25 @@
             }
           }
       },
+      computed:{
+        showImage(){
+          return this.goodsItem.image || this.goodsItem.show.img
+          // return this.goodsItem.show.img || this.goodsItem.image
+        }
+      },
       methods:{
         imgLoad(){
-          this.$bus.$emit('itemImgLoad')
+          // console.log(this.$route.path);
+          if(this.$route.path.indexOf('/home') !== -1){
+            this.$bus.$emit('homeItemImgLoad')
+          }else if(this.$route.path.indexOf('/detail') !== -1){
+            this.$bus.$emit('detailItemImgLoad')
+          }
+          // if(this.$route.path.indexOf('/home')){
+          //   this.$bus.$emit('homeItemImgLoad')
+          // }else if(this.$route.path.indexOf('/detail')){
+          //   this.$bus.$emit('detailItemImgLoad')
+          // }
         },
         //使用动态路由或query的方式，在跳转到详情页时，将商品信息传递过去
         itemClick(){
