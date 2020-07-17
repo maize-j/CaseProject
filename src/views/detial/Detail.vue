@@ -177,6 +177,8 @@
           good.iid = this.iid;
 
           //2.将商品添加到购物车
+          // this.$store.commit('addCart',good)
+          this.$store.dispatch('addCart',good)
         }
       },
       mounted() {

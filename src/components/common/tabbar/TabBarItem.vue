@@ -31,8 +31,8 @@
         },
         methods:{
             itemClick(){
-                console.log(this.$router);
-                console.log(this.path);
+                // console.log(this.$router);
+                // console.log(this.path);
                 this.$router.replace(this.path)
             }
         }
