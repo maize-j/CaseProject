@@ -1,16 +1,16 @@
 <template>
   <div class="cart">
     <cart-nav-bar></cart-nav-bar>
-    <Scroll class="content" ref="scroll"
+    <scroll class="content" ref="scroll"
             :probe-type="3" :pull-up-load="true">
       <cart-goods-item :goods="goodsList"></cart-goods-item>
-    </Scroll>
+    </scroll>
   </div>
 </template>
 
 <script>
   import CartNavBar from "./childrenComponents/CartNavBar";
-  import CartGoodsItem from "./childrenComponents/CartGoodsItem";
+  import CartGoodsItem from "./childrenComponents/CartGoodsList";
 
   import Scroll from "components/common/scroll/Scroll";
 
@@ -23,9 +23,8 @@
       },
       components:{
         CartGoodsItem,
-          CartNavBar,
-        Scroll,
-
+        CartNavBar,
+        Scroll
       },
       created() {
           this.goodsList = this.$store.state.cartList

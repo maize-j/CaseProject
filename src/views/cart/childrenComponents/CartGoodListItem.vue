@@ -1,19 +1,17 @@
 <template>
-    <div class="cart-goods-item">
-      <div>
+    <div>
 
-      </div>
     </div>
 </template>
 
 <script>
     export default {
-        name: "CartGoodsItem",
+        name: "CartGoodListItem",
       props:{
-          goods:{
-            type:Array,
+          goodItem:{
+            type:Object,
             default(){
-              return []
+              return {}
             }
           }
       }
