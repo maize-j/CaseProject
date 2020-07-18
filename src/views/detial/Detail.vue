@@ -14,6 +14,7 @@
     </Scroll>
     <back-top @click.native="backClick" v-show="isShow"></back-top>
     <detail-bottom-bar @addCart="addCart"></detail-bottom-bar>
+<!--    <toast :message="message" :isShow="toastShow"></toast>-->
 
   </div>
 </template>
@@ -30,6 +31,7 @@
 
     import Scroll from "components/common/scroll/Scroll";
     import GoodsList from "components/content/goods/GoodsList";
+    // import Toast from "components/common/toast/Toast";
 
     import {getDetail,getRecommend,GoodsInfo,Shop,DetailInfo,GoodsParams} from "network/detail";
     import {debounce} from 'common/utils'
@@ -47,7 +49,8 @@
         DetailGoodParams,
         DetailCommentInfo,
         GoodsList,
-        DetailBottomBar
+        DetailBottomBar,
+        // Toast
       },
       data(){
         return{
@@ -60,7 +63,9 @@
           commentInfo:{},
           recommendsInfo:[],
           themeTopYs:[],
-          currentIndex:0
+          currentIndex:0,
+          // message:'商品已添加进购物车',
+          // toastShow:false
         }
       },
       created() {
@@ -178,7 +183,19 @@
 
           //2.将商品添加到购物车
           // this.$store.commit('addCart',good)
-          this.$store.dispatch('addCart',good)
+          this.$store.dispatch('addCart',good).then(res=>{
+            // console.log(res);
+            this.$toast.showToast(res,1500)
+            //在Toast中默认将duration设置为了2000毫秒，不输入duration时，时间为2000
+            // this.$toast.showToast(res)
+            // this.message = res;
+            // this.toastShow = true;
+            // setTimeout(()=>{
+            //   this.toastShow = false
+            //   this.message = ''
+            // },1500)
+            // console.log(res);
+          })
         }
       },
       mounted() {
