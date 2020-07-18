@@ -1,13 +1,15 @@
 <template>
-    <div class="cart-goods-item" v-for="item in goods">
-      <cart-good-list-item :goodItem="item"></cart-good-list-item>
-    </div>
+  <div class="cart-goods-item">
+    <cart-good-list-item class="cart-goods-items" v-for="(item,index) in goods"
+                         :key="index"
+                         :good-item="item"></cart-good-list-item>
+  </div>
 </template>
 
 <script>
   import CartGoodListItem from "./CartGoodListItem";
 
-    export default {
+  export default {
         name: "CartGoodsList",
       props:{
           goods:{
@@ -18,11 +20,13 @@
           }
       },
       components:{
-        CartGoodListItem
+        CartGoodListItem,
       }
     }
 </script>
 
 <style scoped>
-
+.cart-goods-item{
+  width: 100%;
+}
 </style>

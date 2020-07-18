@@ -15,6 +15,7 @@ export default {
       context.commit(ADD_OLD_GOOD,product)
     }else{
       //当product为false时，说明cartList中没有该商品，那么为payload添加一个count属性，并将其值设置为1
+      payload.checked = true
       payload.count = 1
       context.commit(ADD_NEW_GOOD,payload)
     }
