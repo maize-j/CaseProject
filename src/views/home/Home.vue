@@ -1,7 +1,7 @@
 <template>
   <div id="home">
     <nav-bar class="home-nav">
-      <div slot="center"><h3>购物街</h3></div>
+      <div slot="center">购物街</div>
     </nav-bar>
     <tab-controller :titles="titles"
                     @tabClick="tabClick"
@@ -245,6 +245,9 @@
   /*  right: 0;*/
   /*  top: 0;*/
   /*  z-index: 1;*/
+  }
+  .home-nav div{
+    font-size: 20px;
   }
   .content{
     overflow: hidden;
