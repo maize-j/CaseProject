@@ -1,4 +1,10 @@
-# supermall
+在b站看的王红元老师的Vuejs的课程跟着做的电子商城实战项目
+
+课程地址：https://www.bilibili.com/video/BV15741177Eh?p=1
+
+项目地址：https://github.com/coderwhy/HYMall
+
+**注：接口可以加老师微信coderwhy003获取**
 
 ## Project setup
 ```
