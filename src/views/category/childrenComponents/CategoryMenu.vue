@@ -45,7 +45,7 @@
       methods:{
         menuListClick(index){
           this.currentIndex = index
-          this.$emit('menuListClick',this.categoryMenus[index].maitKey)
+          this.$emit('menuListClick',index)
         }
       }
     }
@@ -55,7 +55,7 @@
   .category-menus{
     height: 100vh;
     width: 90px;
-    /*position: fixed;*/
+    position: fixed;
   }
   .category-scroll{
     height: calc(100% - 44px - 49px);

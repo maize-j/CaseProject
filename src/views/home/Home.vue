@@ -104,7 +104,7 @@
       this.saveY = this.$refs.scroll.scroll.y
     },
     destroyed() {
-      console.log('destroyed');
+      // console.log('destroyed');
     },
     //混入，会执行common/mixin.js中定义itemListerMixin中的mounted，在需要时，只需在页面引入混入即可
     // mixins:[itemListerMixin],
