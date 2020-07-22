@@ -19,6 +19,7 @@
                           ref="tabController2"></tab-controller>
           <goods-list :goods="showGoods"></goods-list>
         </scroll>
+        <back-top @click.native="backClick" v-show="isShow"></back-top>
       </div>
     </div>
 </template>
@@ -32,9 +33,12 @@
   import TabController from "components/content/tabController/TabController";
   import GoodsList from "components/content/goods/GoodsList";
 
+
   import {getCategory} from "network/category";
   import {debounce} from 'common/utils'
   import {getSubCategory, getSubCategoryDetail} from "../../network/category";
+  //回到顶部箭头
+  import {backTopMixin} from "common/mixin";
 
   export default {
       name: "Catagory",
@@ -97,6 +101,8 @@
       })
 
     },
+    //回到顶部箭头混入
+    mixins:[backTopMixin],
     methods:{
         //菜单选项
       menuListClick(index){
@@ -149,6 +155,14 @@
       },
       //滚动位置
       contentScroll(position){
+
+        //决定回到顶部箭头是否显示
+        if(position.y < -800){
+          this.isShow = true
+        }else{
+          this.isShow = false
+        }
+
         if(position.y < -this.offSetTop){
           this.isTabShow = true
         }else{

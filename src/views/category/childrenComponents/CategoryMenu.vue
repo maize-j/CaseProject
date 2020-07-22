@@ -55,10 +55,12 @@
   .category-menus{
     height: 100vh;
     width: 90px;
+    overflow: hidden;
     position: fixed;
   }
   .category-scroll{
     height: calc(100% - 44px - 49px);
+    /*position:absolute;*/
   }
   .category-menu-list,.sub-category-menu-list{
     border-bottom: 1px solid #C0C0C0;
